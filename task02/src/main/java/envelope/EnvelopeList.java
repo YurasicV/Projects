@@ -1,7 +1,5 @@
 package envelope;
 
-import compare.EnvelopesComparator;
-
 import java.util.Collections;
 import java.util.LinkedList;
 

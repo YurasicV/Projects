@@ -1,6 +1,4 @@
-package compare;
-
-import envelope.Envelope;
+package envelope;
 
 import java.util.Comparator;
 
