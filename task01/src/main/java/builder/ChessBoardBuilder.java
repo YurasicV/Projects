@@ -4,30 +4,20 @@ import chessboard.ChessBoard;
 import console.Writer;
 import parameters.ParameterList;
 
-public class ChessBoardBuilder {
-    private ParameterList parameterList;
-    private Writer writer;
-
+public class ChessBoardBuilder extends BoardBuilder {
     public ChessBoardBuilder(ParameterList parameterList, Writer writer) {
-        this.parameterList = parameterList;
-        this.writer = writer;
+        super(parameterList, writer);
     }
 
-    public void run() {
-        if (parameterList.count() == 0) {
-            writer.print(ChessBoardBuilderHelper.getHelp());
-        } else if (isValidParameters()) {
-            parameterList.init();
-            ChessBoard chessBoard = new ChessBoard(
-                    parameterList.getNextParameter().toInteger(),
-                    parameterList.getNextParameter().toInteger());
-            writer.print(chessBoard);
-        } else {
-            writer.print("Wrong parameters!");
-        }
+    public void buildBoard() {
+        parameterList.init();
+        ChessBoard chessBoard = new ChessBoard(
+                parameterList.getNextParameter().toInteger(),
+                parameterList.getNextParameter().toInteger());
+        writer.print(chessBoard);
     }
 
-    private boolean isValidParameters() {
+    public boolean isValidParameters() {
         parameterList.init();
         try {
             return (parameterList.getNextParameter().toInteger() > 0 &&
@@ -35,5 +25,13 @@ public class ChessBoardBuilder {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void printHelp() {
+        writer.print(ChessBoardBuilderHelper.getHelp());
+    }
+
+    public void printError() {
+        writer.print("Wrong parameters!");
     }
 }

@@ -1,24 +1,15 @@
 package console;
 
+import figures.Figure;
 import figures.Triangle;
 import parameters.ParameterList;
 
-import java.util.Scanner;
-
-/*
-Class allows to read required data from console
-to create Triangle
- */
-public class TriangleReader {
-    private Scanner in;
-    private Writer writer;
-
+public class TriangleReader extends FigureReader {
     public TriangleReader(Writer writer) {
-        this.writer = writer;
-        in = new Scanner(System.in);
+        super(writer);
     }
 
-    public Triangle readTriangle() {
+    public Figure read() {
         ParameterList parameterList;
         boolean readError;
         String name = "";
@@ -45,11 +36,5 @@ public class TriangleReader {
             }
         } while (readError);
         return new Triangle(name, sizeA, sizeB, sizeC);
-    }
-
-    public boolean isOneMoreTriangle() {
-        writer.print("\nDo you want to add one more triangle? (Yes/No) : ");
-        String strAnswer = in.nextLine().toUpperCase();
-        return strAnswer.equals("Y") || strAnswer.equals("YES");
     }
 }

@@ -1,6 +1,4 @@
-package lists;
-
-import figures.Figure;
+package figures;
 
 import java.util.Collections;
 import java.util.Comparator;

@@ -1,11 +1,11 @@
-package envelope;
+package nested;
 
 import static java.lang.Math.*;
 
 /*
 Class describes Envelope
  */
-public class Envelope {
+public class Envelope implements Nested {
     private int number;
     private double sizeA;
     private double sizeB;
@@ -29,10 +29,14 @@ public class Envelope {
         return "Envelope " + this.number;
     }
 
-    public boolean isNestedTo(Envelope envelope) {
-        double sizeA = envelope.getSizeA();
-        double sizeB = envelope.getSizeB();
-        return isNestedInSize(sizeA, sizeB) || isNestedInRotation(sizeA, sizeB);
+    public boolean isNestedTo(Nested nested) {
+        if (nested instanceof Envelope) {
+            double sizeA = ((Envelope) nested).getSizeA();
+            double sizeB = ((Envelope) nested).getSizeB();
+            return isNestedInSize(sizeA, sizeB) || isNestedInRotation(sizeA, sizeB);
+        } else {
+            return false;
+        }
     }
 
     private boolean isNestedInSize(double sizeA, double sizeB) {
