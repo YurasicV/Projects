@@ -1,8 +1,5 @@
 package chessboard;
 
-/*
-Chess board class
- */
 public class ChessBoard {
     private int rows;
     private int cols;

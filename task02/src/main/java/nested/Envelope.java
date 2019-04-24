@@ -2,9 +2,6 @@ package nested;
 
 import static java.lang.Math.*;
 
-/*
-Class describes Envelope
- */
 public class Envelope implements Nested {
     private int number;
     private double sizeA;
@@ -29,6 +26,7 @@ public class Envelope implements Nested {
         return "Envelope " + this.number;
     }
 
+    @Override
     public boolean isNestedTo(Nested nested) {
         if (nested instanceof Envelope) {
             double sizeA = ((Envelope) nested).getSizeA();

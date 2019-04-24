@@ -1,37 +1,37 @@
 package builder;
 
 import chessboard.ChessBoard;
-import console.Writer;
+import ui.UserInterface;
 import parameters.ParameterList;
 
-public class ChessBoardBuilder extends BoardBuilder {
-    public ChessBoardBuilder(ParameterList parameterList, Writer writer) {
-        super(parameterList, writer);
+public class ChessBoardBuilder{
+    private ParameterList parameterList;
+    private UserInterface ui;
+
+    public ChessBoardBuilder(ParameterList parameterList, UserInterface ui) {
+        this.parameterList = parameterList;
+        this.ui = ui;
     }
 
-    public void buildBoard() {
-        parameterList.init();
-        ChessBoard chessBoard = new ChessBoard(
-                parameterList.getNextParameter().toInteger(),
-                parameterList.getNextParameter().toInteger());
-        writer.print(chessBoard);
-    }
+    public void run() {
+        if (parameterList.count() == 0) {
+            printHelp();
+        } else {
+            ChessBoardValidator validator = new ChessBoardValidator(parameterList);
+            validator.validate();
+            if (validator.isValid()) {
+                ChessBoard chessBoard = new ChessBoard(
+                        validator.getRows(),
+                        validator.getCols());
+                ui.print(chessBoard.toString());
 
-    public boolean isValidParameters() {
-        parameterList.init();
-        try {
-            return (parameterList.getNextParameter().toInteger() > 0 &&
-                    parameterList.getNextParameter().toInteger() > 0);
-        } catch (Exception e) {
-            return false;
+            } else {
+                ui.print(validator.getMessage());
+            }
         }
     }
 
-    public void printHelp() {
-        writer.print(ChessBoardBuilderHelper.getHelp());
-    }
-
-    public void printError() {
-        writer.print("Wrong parameters!");
+    private void printHelp() {
+        ui.print(ChessBoardHelper.getHelp());
     }
 }

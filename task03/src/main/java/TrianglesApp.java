@@ -1,12 +1,13 @@
-import console.TriangleReader;
-import console.Writer;
-import handle.FiguresHandle;
+import handler.TriangleReader;
+import handler.FiguresHandler;
+import ui.ConsoleInterface;
 
 public class TrianglesApp {
     public static void main(String[] args) {
-        Writer writer = new Writer();
-        TriangleReader triangleReader = new TriangleReader(writer);
-        FiguresHandle figuresHandle = new FiguresHandle(triangleReader, writer);
-        figuresHandle.run();
+        ConsoleInterface console = new ConsoleInterface();
+        TriangleReader triangleReader = new TriangleReader(console);
+
+        FiguresHandler figuresHandler = new FiguresHandler(triangleReader, console);
+        figuresHandler.run();
     }
 }

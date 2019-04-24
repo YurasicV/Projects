@@ -1,17 +1,12 @@
 package figures;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 
-/*
-Class manages a list of Figures
- */
 public class FiguresList {
     private LinkedList<Figure> list;
 
     public FiguresList() {
-        list = new LinkedList<Figure>();
+        list = new LinkedList<>();
     }
 
     public void addFigure(Figure figure) {
@@ -29,12 +24,6 @@ public class FiguresList {
     }
 
     public void sortBySquareDesc() {
-        Collections.sort(list, new Comparator<Figure>() {
-            public int compare(Figure f1, Figure f2) {
-                return Double.compare(f2.getSquare(), f1.getSquare());
-            }
-        });
-
+        list.sort((f1, f2) -> Double.compare(f2.getSquare(), f1.getSquare()));
     }
-
 }

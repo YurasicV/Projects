@@ -1,46 +1,51 @@
 package handler;
 
-import java.io.*;
+import content.FileContent;
+import ui.UserInterface;
+import parameters.ParameterList;
 
-/*
-Class allows to input from or output to file
- */
-public class FileHandler extends StreamHandler {
-    private String errorMessage;
+public class FileHandler {
+    private ParameterList parameterList;
+    private UserInterface ui;
 
-    public FileHandler() {
-        errorMessage = "";
+    public FileHandler(ParameterList parameterList, UserInterface ui) {
+        this.parameterList = parameterList;
+        this.ui = ui;
     }
 
-    public boolean loadFromFile(String fileName) {
-        boolean success = false;
-        errorMessage = "";
-        try (FileInputStream fis = new FileInputStream(fileName)) {
-            inputFromStream(fis);
-            success = true;
-        } catch (FileNotFoundException e) {
-            errorMessage = "File " + fileName + " not found";
-        } catch (IOException e) {
-            errorMessage = "IO Error";
-            e.printStackTrace();
+    public void run() {
+        if (parameterList.count() == 0) {
+            ui.print(FileHandlerHelper.getHelp());
+        } else {
+            FileHandlerValidator validator = new FileHandlerValidator(parameterList);
+            validator.validate();
+            if (validator.isValid()) {
+                processing(validator);
+            } else {
+                ui.print(validator.getMessage());
+            }
         }
-        return success;
     }
 
-    public boolean saveToFile(String fileName) {
-        boolean success = false;
-        errorMessage = "";
-        try (FileOutputStream fos = new FileOutputStream(fileName)) {
-            outputToStream(fos);
-            success = true;
-        } catch (IOException e) {
-            errorMessage = "IO Error";
-            e.printStackTrace();
+    private void processing(FileHandlerValidator validator) {
+        String fileName = validator.getFileName();
+        FileContent content = new FileContent(fileName);
+        if (!content.load()) {
+            ui.print(content.getErrorMessage());
+            return;
         }
-        return success;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
+        String search = validator.getSearch();
+        String replace = validator.getReplace();
+        if (replace.isEmpty()) {
+            ui.print("String \"" + search + "\" has " +
+                    content.countOccurrences(search) + " occurences");
+        } else {
+            content.replaceAll(search, replace);
+            ui.print("String \"" + search + "\" has been replaced to " +
+                    replace);
+            if (!content.save()) {
+                ui.print(content.getErrorMessage());
+            }
+        }
     }
 }

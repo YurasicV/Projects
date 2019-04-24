@@ -2,9 +2,6 @@ package figures;
 
 import static java.lang.Math.sqrt;
 
-/*
-Class of Triangle
- */
 public class Triangle extends Figure {
     private double sizeA;
     private double sizeB;

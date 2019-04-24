@@ -1,13 +1,9 @@
 package parameters;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-/*
-Class parses parameter's string and allows to get each parameter
- */
-public class ParameterList {
-    private LinkedList<Parameter> list;
-    private int index;
+public class ParameterList extends ArrayList<Parameter> {
+    private ArrayList<Parameter> list;
 
     public ParameterList(String[] args) {
         initList(args);
@@ -22,19 +18,18 @@ public class ParameterList {
         this(argsStr, " ");
     }
 
-    public Parameter getNextParameter() {
-        return ((index >= 0) && (index < list.size())) ? list.get(index++) : null;
+    public int count() {
+        return list.size();
     }
 
-    public void init() {
-        index = 0;
+    public Parameter get(int index) throws IndexOutOfBoundsException {
+        return list.get(index);
     }
 
     private void initList(String[] args) {
-        init();
-        list = new LinkedList<Parameter>();
+        list = new ArrayList<>();
         for (String arg: args) {
-            list.addLast(new Parameter(arg.trim()));
+            list.add(new Parameter(arg));
         }
     }
 }
