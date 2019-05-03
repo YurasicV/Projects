@@ -1,7 +1,8 @@
 package handler;
 
-import content.DataContent;
-import content.FileContent;
+import file.Content;
+import file.ContentService;
+import file.FileContentService;
 import ui.UserInterface;
 
 public class LuckyTicketHandler {
@@ -13,17 +14,18 @@ public class LuckyTicketHandler {
 
     public void run() {
         String fileName = ui.readString("Enter full file name: ");   // src/main/resources/method.txt
-        FileContent content = new FileContent(fileName);
-        if (content.load()) {
+        ContentService contentService = new FileContentService(fileName);
+        Content content = contentService.read();
+        if (content != null) {
             ui.print(getCountingResult(content));
         } else {
-            ui.print(content.getErrorMessage());
+            ui.print(contentService.getErrorMessage());
         }
     }
 
-    private String getCountingResult(DataContent content) {
+    private String getCountingResult(Content content) {
         for (LuckyTicketEnum luckyTicketEnum: LuckyTicketEnum.values()) {
-            if (content.isContained(luckyTicketEnum.toString())) {
+            if (content.contains(luckyTicketEnum.toString())) {
                 return "Amount of " + luckyTicketEnum + " lucky tickets is " +
                         luckyTicketEnum.getCounter().count();
             }

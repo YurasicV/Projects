@@ -17,14 +17,13 @@ public class FibHandler {
         if (parameterList.count() == 0) {
             printHelp();
         } else {
-            FibValidator validator = new FibValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
+            FibParameterData parameterData = new FibParameterData(parameterList);
+            if (parameterData.isValid()) {
                 ui.print(FibSeries.generate(
-                        validator.getMinValue(),
-                        validator.getMaxValue()));
+                        parameterData.getMinValue(),
+                        parameterData.getMaxValue()));
             } else {
-                ui.print(validator.getMessage());
+                ui.print(parameterData.getMessage());
             }
         }
     }

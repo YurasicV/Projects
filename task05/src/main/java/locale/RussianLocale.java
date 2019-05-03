@@ -1,8 +1,8 @@
 package locale;
 
-import converter.AbstractLocale;
+import converter.Locale;
 
-public class RussianLocale extends AbstractLocale {
+public class RussianLocale extends Locale {
     public RussianLocale() {
         setDigit1(new String[][] {
                 {"ноль","один","два","три","четыре","пять","шесть","семь","восемь","девять"},

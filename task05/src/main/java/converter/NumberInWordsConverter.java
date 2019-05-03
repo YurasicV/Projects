@@ -2,7 +2,7 @@ package converter;
 
 public class NumberInWordsConverter {
 
-    public static String convert(long number, AbstractLocale locale) {
+    public static String convert(long number, Locale locale) {
         if (number < 0) {
             return "";
         }
@@ -18,7 +18,7 @@ public class NumberInWordsConverter {
     }
 
     private static void appendTriadNumberInWords(StringBuilder inWords,
-                                                 AbstractLocale locale, int triadNumber, int triad) {
+                                                 Locale locale, int triadNumber, int triad) {
         if (triadNumber == 0 && triad > 0) {
             return;
         }

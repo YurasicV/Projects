@@ -17,14 +17,13 @@ public class NumberInWordsHandler {
         if (parameterList.count() == 0) {
             printHelp();
         } else {
-            NumberInWordsValidator validator = new NumberInWordsValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
+            NumberInWordsParameterData parameterData = new NumberInWordsParameterData(parameterList);
+            if (parameterData.isValid()) {
                 ui.print(NumberInWordsConverter.convert(
-                        validator.getNumber(),
-                        validator.getLocale()));
+                        parameterData.getNumber(),
+                        parameterData.getLocale()));
             } else {
-                ui.print(validator.getMessage());
+                ui.print(parameterData.getMessage());
             }
         }
     }

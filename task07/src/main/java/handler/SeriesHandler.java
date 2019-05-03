@@ -17,14 +17,13 @@ public class SeriesHandler {
         if (parameterList.count() == 0) {
             printHelp();
         } else {
-            SeriesValidator validator = new SeriesValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
-//                ui.print(Series.generate(validator.getNumber()));
-                ui.print(Series.generate(validator.getNumber(), (i, n) -> i * i <= n));
-//                ui.print(Series.generate((long)Math.sqrt(validator.getNumber()), (i, n) -> i <= n));
+            SeriesParameterData parameterData = new SeriesParameterData(parameterList);
+            if (parameterData.isValid()) {
+                long number = parameterData.getNumber();
+                ui.print("\nMethod1: " + Series.generateMethod1(number));
+                ui.print("\nMethod2: " + Series.generateMethod2(number));
             } else {
-                ui.print(validator.getMessage());
+                ui.print(parameterData.getMessage());
             }
         }
     }

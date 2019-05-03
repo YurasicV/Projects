@@ -1,6 +1,8 @@
 package handler;
 
-import content.FileContent;
+import file.Content;
+import file.ContentService;
+import file.FileContentService;
 import ui.UserInterface;
 import parameters.ParameterList;
 
@@ -17,25 +19,25 @@ public class FileHandler {
         if (parameterList.count() == 0) {
             ui.print(FileHandlerHelper.getHelp());
         } else {
-            FileHandlerValidator validator = new FileHandlerValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
-                processing(validator);
+            FileHandlerParameterData parameterData = new FileHandlerParameterData(parameterList);
+            if (parameterData.isValid()) {
+                processing(parameterData);
             } else {
-                ui.print(validator.getMessage());
+                ui.print(parameterData.getMessage());
             }
         }
     }
 
-    private void processing(FileHandlerValidator validator) {
-        String fileName = validator.getFileName();
-        FileContent content = new FileContent(fileName);
-        if (!content.load()) {
-            ui.print(content.getErrorMessage());
+    private void processing(FileHandlerParameterData parameterData) {
+        String fileName = parameterData.getFileName();
+        ContentService contentService = new FileContentService(fileName);
+        Content content = contentService.read();
+        if (content == null) {
+            ui.print(contentService.getErrorMessage());
             return;
         }
-        String search = validator.getSearch();
-        String replace = validator.getReplace();
+        String search = parameterData.getSearch();
+        String replace = parameterData.getReplace();
         if (replace.isEmpty()) {
             ui.print("String \"" + search + "\" has " +
                     content.countOccurrences(search) + " occurences");
@@ -43,8 +45,8 @@ public class FileHandler {
             content.replaceAll(search, replace);
             ui.print("String \"" + search + "\" has been replaced to " +
                     replace);
-            if (!content.save()) {
-                ui.print(content.getErrorMessage());
+            if (!contentService.write(content)) {
+                ui.print(contentService.getErrorMessage());
             }
         }
     }

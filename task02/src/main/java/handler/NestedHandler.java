@@ -3,18 +3,19 @@ package handler;
 import ui.UserInterface;
 import nested.Nested;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NestedHandler {
     private int nestedCount;
     private NestedReader nestedReader;
     private UserInterface ui;
-    private ArrayList<Nested> nestedList;
+    private List<Nested> nestedList;
 
     public NestedHandler(int nestedCount, NestedReader nestedReader, UserInterface ui) {
         this.nestedCount = nestedCount;
         this.nestedReader = nestedReader;
         this.ui = ui;
-        nestedList = new ArrayList<Nested>();
+        nestedList = new ArrayList<>();
     }
 
     public void run() {
@@ -41,10 +42,10 @@ public class NestedHandler {
                 nested2 = nestedList.get(j);
                 if (nested1.isNestedTo(nested2)) {
                     result.append(nested1).append(" can be nested into ");
-                    result.append(nested2).append("\n");
+                    result.append(nested2).append('\n');
                 } else if (nested2.isNestedTo(nested1)) {
                     result.append(nested2).append(" can be nested into ");
-                    result.append(nested1).append("\n");
+                    result.append(nested1).append('\n');
                 } else {
                     result.append(nested1).append(" and ").append(nested2);
                     result.append(" cannot be nested into each other\n");

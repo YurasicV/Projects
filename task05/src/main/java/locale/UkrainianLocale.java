@@ -1,8 +1,8 @@
 package locale;
 
-import converter.AbstractLocale;
+import converter.Locale;
 
-public class UkrainianLocale extends AbstractLocale {
+public class UkrainianLocale extends Locale {
     public UkrainianLocale() {
         setDigit1(new String[][] {
                 {"ноль","один","два","три","чотири","п'ять","шість","сім","вісім","дев'ять"},

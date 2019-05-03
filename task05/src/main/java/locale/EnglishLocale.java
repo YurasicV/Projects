@@ -1,14 +1,14 @@
 package locale;
 
-import converter.AbstractLocale;
+import converter.Locale;
 
-public class EnglishLocale extends AbstractLocale {
+public class EnglishLocale extends Locale {
     public EnglishLocale() {
         setDigit1(new String[][] {
                 {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"},
                 {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"},
         });
-        setDigit10(new String[] {"", "ten", "twenty", "thirty", "fourty", "fifty", "sixty",
+        setDigit10(new String[] {"", "ten", "twenty", "thirty", "forty", "fifty", "sixty",
                 "seventy", "eighty", "ninety"});
         setDigit11(new String[] {"", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
                 "sixteen", "seventeen", "eighteen", "nineteen"});

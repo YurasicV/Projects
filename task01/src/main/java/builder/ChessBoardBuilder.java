@@ -17,16 +17,15 @@ public class ChessBoardBuilder{
         if (parameterList.count() == 0) {
             printHelp();
         } else {
-            ChessBoardValidator validator = new ChessBoardValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
+            ChessBoardParameterData parameterData = new ChessBoardParameterData(parameterList);
+            if (parameterData.isValid()) {
                 ChessBoard chessBoard = new ChessBoard(
-                        validator.getRows(),
-                        validator.getCols());
+                        parameterData.getRows(),
+                        parameterData.getCols());
                 ui.print(chessBoard.toString());
 
             } else {
-                ui.print(validator.getMessage());
+                ui.print(parameterData.getMessage());
             }
         }
     }

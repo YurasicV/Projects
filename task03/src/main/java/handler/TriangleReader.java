@@ -25,16 +25,15 @@ public class TriangleReader implements FigureReader {
             parameterList = new ParameterList(
                     ui.readLine("\nEnter a triangle in the format <name,a,b,c>: "),
                     ",");
-            TriangleValidator validator = new TriangleValidator(parameterList);
-            validator.validate();
-            if (validator.isValid()) {
-                name = validator.getName();
-                sizeA = validator.getSizeA();
-                sizeB = validator.getSizeB();
-                sizeC = validator.getSizeC();
+            TriangleParameterData parameterData = new TriangleParameterData(parameterList);
+            if (parameterData.isValid()) {
+                name = parameterData.getName();
+                sizeA = parameterData.getSizeA();
+                sizeB = parameterData.getSizeB();
+                sizeC = parameterData.getSizeC();
             } else {
                 readError = true;
-                ui.print(validator.getMessage() + " Try again...");
+                ui.print(parameterData.getMessage() + " Try again...");
             }
         } while (readError);
         return new Triangle(name, sizeA, sizeB, sizeC);

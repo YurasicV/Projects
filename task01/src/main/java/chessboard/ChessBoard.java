@@ -15,12 +15,12 @@ public class ChessBoard {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
-                    stringBuilder.append("*");
+                    stringBuilder.append('*');
                 } else {
-                    stringBuilder.append(" ");
+                    stringBuilder.append(' ');
                 }
             }
-            stringBuilder.append("\n");
+            stringBuilder.append('\n');
         }
         return stringBuilder.toString();
     }

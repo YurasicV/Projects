@@ -1,9 +1,10 @@
 package parameters;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ParameterList extends ArrayList<Parameter> {
-    private ArrayList<Parameter> list;
+public class ParameterList {
+    private List<Parameter> list;
 
     public ParameterList(String[] args) {
         initList(args);

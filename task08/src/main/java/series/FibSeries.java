@@ -1,20 +1,20 @@
 package series;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class FibSeries {
     public static String generate(long minValue, long maxValue) {
-        StringBuilder stringBuilder = new StringBuilder();
+        List<Long> list = new LinkedList<>();
         long valueA = 0;
         long valueB = 1;
         while (valueB <= maxValue) {
             if (valueB >= minValue) {
-                if (stringBuilder.length() > 0) {
-                    stringBuilder.append(", ");
-                }
-                stringBuilder.append(valueB);
+                list.add(valueB);
             }
             valueB = valueA + valueB;
             valueA = valueB - valueA;
         }
-        return stringBuilder.toString();
+        return list.toString();
     }
 }

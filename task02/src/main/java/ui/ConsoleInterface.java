@@ -3,7 +3,7 @@ package ui;
 import java.util.Scanner;
 
 public class ConsoleInterface implements UserInterface {
-    private Scanner in;
+    private final Scanner in;
 
     public ConsoleInterface() {
         in = new Scanner(System.in);
