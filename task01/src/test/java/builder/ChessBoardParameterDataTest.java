@@ -29,6 +29,7 @@ public class ChessBoardParameterDataTest {
     public void convertWithCorrectParameters() throws ParameterConversionException {
         ChessBoardParameterData chessBoardParameterData = new ChessBoardParameterData(
                 new ParameterList(new String[] {"5", "6"}));
+
         chessBoardParameterData.convert();
         assertEquals(5, chessBoardParameterData.getRows());
         assertEquals(6, chessBoardParameterData.getCols());
@@ -38,6 +39,7 @@ public class ChessBoardParameterDataTest {
     public void convertWithIncorrectParameters() throws ParameterConversionException {
         ChessBoardParameterData chessBoardParameterData = new ChessBoardParameterData(
                 new ParameterList(new String[] {"abc"}));
+
         chessBoardParameterData.convert();
     }
 }

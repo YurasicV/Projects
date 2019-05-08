@@ -1,29 +1,32 @@
 package series;
 
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
 import static org.junit.Assert.*;
 
+@RunWith(Parameterized.class)
 public class SeriesTest {
+    private long number;
+    private String expected;
 
-    @Test
-    public void generateMethod1() {
-        assertEquals("[1, 2, 3, 4, 5, 6, 7]", Series.generateMethod1(50));
+    public SeriesTest(long number, String expected) {
+        this.number = number;
+        this.expected = expected;
+    }
+
+    @Parameterized.Parameters(name = "{index}: generate({0})={1}")
+    public static Iterable<Object[]> dataForTest() {
+        return Arrays.asList(new Object[][]{
+                {50, "1,2,3,4,5,6,7"},
+                {100, "1,2,3,4,5,6,7,8,9,10"},
+                {0, ""}
+        });
     }
 
     @Test
-    public void generateMethod1None() {
-        assertEquals("[]", Series.generateMethod1(0));
-    }
-
-
-    @Test
-    public void generateMethod2() {
-        assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]", Series.generateMethod2(100));
-    }
-
-    @Test
-    public void generateMethod2None() {
-        assertEquals("[]", Series.generateMethod2(0));
+    public void generate() {
+        assertEquals(expected, Series.generate(number));
     }
 }

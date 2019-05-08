@@ -19,9 +19,7 @@ public class SeriesHandler {
         } else {
             SeriesParameterData parameterData = new SeriesParameterData(parameterList);
             if (parameterData.isValid()) {
-                long number = parameterData.getNumber();
-                ui.print("\nMethod1: " + Series.generateMethod1(number));
-                ui.print("\nMethod2: " + Series.generateMethod2(number));
+                ui.print(Series.generate(parameterData.getNumber()));
             } else {
                 ui.print(parameterData.getMessage());
             }

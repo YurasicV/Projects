@@ -2,30 +2,38 @@ package converter;
 
 import locale.RussianLocale;
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
 import static org.junit.Assert.*;
 
+@RunWith(Parameterized.class)
 public class NumberInWordsConverterTest {
     private Locale locale = new RussianLocale();
+    private long number;
+    private String expected;
 
-    @Test
-    public void convertBigNumber() {
-        long bigNumber = 123456789;
-        String bigNumberInWords = "сто двадцать три миллиона " +
-                "четыреста пятьдесят шесть тысяч семьсот восемьдесят девять";
-        String numberInWords = NumberInWordsConverter.convert(bigNumber, locale);
-        assertEquals(bigNumberInWords, numberInWords);
+    public NumberInWordsConverterTest(long number, String expected) {
+        this.number = number;
+        this.expected = expected;
+    }
+
+    @Parameterized.Parameters(name = "{index}: convert({0})={1}")
+    public static Iterable<Object[]> dataForTest() {
+        return Arrays.asList(new Object[][]{
+                {123456789, "сто двадцать три миллиона четыреста пятьдесят шесть тысяч" +
+                        " семьсот восемьдесят девять"},
+                {5376271, "пять миллионов триста семьдесят шесть тысяч двести семьдесят один"},
+                {4563, "четыре тысячи пятьсот шестьдесят три"},
+                {716, "семьсот шестнадцать"},
+                {52, "пятьдесят два"},
+                {0, "ноль"},
+                {-30, ""}
+        });
     }
 
     @Test
-    public void convertZero() {
-        String numberInWords = NumberInWordsConverter.convert(0, locale);
-        assertEquals("ноль", numberInWords);
-    }
-
-    @Test
-    public void convertIncorrectNumber() {
-        String numberInWords = NumberInWordsConverter.convert(-100, locale);
-        assertEquals("", numberInWords);
+    public void convert() {
+        assertEquals(expected, NumberInWordsConverter.convert(number, locale));
     }
 }

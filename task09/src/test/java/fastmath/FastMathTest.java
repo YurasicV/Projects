@@ -1,26 +1,35 @@
 package fastmath;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
 import static org.junit.Assert.*;
 
+@RunWith(Parameterized.class)
 public class FastMathTest {
-    @Test
-    public void powOddExponent() {
-        assertEquals(3125, FastMath.pow(5, 5));
+    private long base;
+    private long exponent;
+    private long expected;
+
+    public FastMathTest(long base, long exponent, long expected) {
+        this.base = base;
+        this.exponent = exponent;
+        this.expected = expected;
+    }
+
+    @Parameterized.Parameters(name = "{index}: pow({0},{1})={2}")
+    public static Iterable<Object[]> dataForTest() {
+        return Arrays.asList(new Object[][]{
+                {5, 5, 3125},
+                {3, 6, 729},
+                {4, 0, 1},
+                {-6, 3, -216}
+        });
     }
 
     @Test
-    public void powEvenExponent() {
-        assertEquals(729, FastMath.pow(3, 6));
-    }
-
-    @Test
-    public void powZeroExponent() {
-        assertEquals(1, FastMath.pow(4, 0));
-    }
-
-    @Test
-    public void powNegativeBase() {
-        assertEquals(-216, FastMath.pow(-6, 3));
+    public void pow() {
+        assertEquals(expected, FastMath.pow(base, exponent));
     }
 }

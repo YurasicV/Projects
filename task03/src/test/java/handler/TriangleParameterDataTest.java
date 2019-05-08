@@ -15,26 +15,30 @@ public class TriangleParameterDataTest {
 
     @Test
     public void getName() {
-        Whitebox.setInternalState(triangleParameterDataMock, "name", "triangle");
-        assertEquals("triangle", triangleParameterDataMock.getName());
+        final String triangleName = "triangle";
+        Whitebox.setInternalState(triangleParameterDataMock, "name", triangleName);
+        assertEquals(triangleName, triangleParameterDataMock.getName());
     }
 
     @Test
     public void getSizeA() {
-        Whitebox.setInternalState(triangleParameterDataMock, "sizeA", 1.0);
-        assertEquals(1.0, triangleParameterDataMock.getSizeA(), 0);
+        final double sizeA = 1.0;
+        Whitebox.setInternalState(triangleParameterDataMock, "sizeA", sizeA);
+        assertEquals(sizeA, triangleParameterDataMock.getSizeA(), 0);
     }
 
     @Test
     public void getSizeB() {
-        Whitebox.setInternalState(triangleParameterDataMock, "sizeB", 1.0);
-        assertEquals(1.0, triangleParameterDataMock.getSizeB(), 0);
+        final double sizeB = 1.0;
+        Whitebox.setInternalState(triangleParameterDataMock, "sizeB", sizeB);
+        assertEquals(sizeB, triangleParameterDataMock.getSizeB(), 0);
     }
 
     @Test
     public void getSizeC() {
-        Whitebox.setInternalState(triangleParameterDataMock, "sizeC", 1.0);
-        assertEquals(1.0, triangleParameterDataMock.getSizeC(), 0);
+        final double sizeC = 1.0;
+        Whitebox.setInternalState(triangleParameterDataMock, "sizeC", sizeC);
+        assertEquals(sizeC, triangleParameterDataMock.getSizeC(), 0);
     }
 
     @Test

@@ -1,22 +1,12 @@
 package series;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 public class Series {
-    public static String generateMethod1(long number) {
-        return generateWithCondition(number, (i, n) -> i * i <= n);
-    }
-
-    public static String generateMethod2(long number) {
-        return generateWithCondition((long)Math.sqrt(number), (i, n) -> i <= n);
-    }
-
-    private static String generateWithCondition(long number, Condition condition) {
-        List<Long> list = new LinkedList<>();
-        for (long i = 1; condition.checked(i, number); i++) {
-            list.add(i);
-        }
-        return list.toString();
+    public static String generate(long number) {
+        return LongStream.rangeClosed(1, (long) Math.sqrt(number))
+                .mapToObj(Long::toString)
+                .collect(Collectors.joining(","));
     }
 }

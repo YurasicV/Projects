@@ -31,6 +31,7 @@ public class FiguresListTest {
     @Test
     public void addFigure() {
         figuresList.addFigure(figureMock);
+
         LinkedList<Figure> list = (LinkedList<Figure>) Whitebox.getInternalState(figuresList, "list");
         assertEquals(1, list.size());
         assertEquals(figureMock, list.getLast());
@@ -46,7 +47,9 @@ public class FiguresListTest {
     public void sortBySquareDesc() {
         figuresList.addFigure(figureMock);
         figuresList.addFigure(anotherFigureMock);
+
         figuresList.sortBySquareDesc();
+
         LinkedList<Figure> list = (LinkedList<Figure>) Whitebox.getInternalState(figuresList, "list");
         assertEquals(figureMock, list.getLast());
         assertEquals(anotherFigureMock, list.getFirst());

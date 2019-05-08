@@ -1,16 +1,12 @@
 package counter;
 
+import java.util.stream.IntStream;
+
 public abstract class LuckyTicketCounter {
     public int count() {
-        int MIN_NUMBER = 0;
-        int MAX_NUMBER = 999999;
-        int counter = 0;
-        for (int number = MIN_NUMBER; number <= MAX_NUMBER; number++) {
-            if (isLucky(numberToDigits(number))) {
-                counter++;
-            }
-        }
-        return counter;
+        return (int) IntStream.rangeClosed(0, 999999)
+                .filter(n -> isLucky(numberToDigits(n)))
+                .count();
     }
 
     private int[] numberToDigits(int number) {
