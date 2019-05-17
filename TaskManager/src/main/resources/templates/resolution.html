@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Edit</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <form th:action="@{/task}" method="post">
+        <input type="submit" value="Back to Task"/>
+    </form>
+</div>
+<br>
+<h3>Resolution: </h3>
+<div>
+    <form action="#" th:action="@{/resolution_add}" th:object="${resolution}" method="post">
+        <table>
+            <tr>
+                <td>User:</td>
+                <td>
+                    <select th:field="*{user}">
+                        <option th:each="user : ${users}"
+                                th:value="${user.id}"
+                                th:utext="${user.fullName}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Queue number:</td>
+                <td><input type="number" min="1" max="9" step="1" value="1" name="queueNumber" required/></td>
+            </tr>
+            <tr>
+                <td>Instruction:</td>
+                <td>
+                    <select th:field="*{instruction}">
+                        <option th:each="instruction : ${T(app.entity.Instruction).values()}"
+                                th:value="${instruction}"
+                                th:utext="${instruction}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

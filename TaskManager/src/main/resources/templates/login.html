@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Manager Login</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/register}" method="get">
+        <input type="submit" value="Register"/>
+    </form>
+</div>
+<br>
+<h3>Login:</h3>
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+<div th:if="${param.error}">
+    <p>Invalid username or password.</p>
+</div>
+<div th:if="${param.logout}">
+    <p>You have been logged out.</p>
+</div>
+<div>
+<form action="#" th:action="@{/login}" th:object="${user}" method="post">
+    <table>
+        <tr><td>User name: </td><td><input type="text" name="userName" required /></td></tr>
+        <tr><td>Password: </td><td><input type="password" name="password" required /></td></tr>
+        <tr><td colspan="2"><button type="submit">Sign In</button></td></tr>
+    </table>
+</form>
+</div>
+</body>
+</html>

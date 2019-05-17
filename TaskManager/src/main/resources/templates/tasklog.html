@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Edit</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <form th:action="@{/task}" method="post">
+        <input type="submit" value="Back to Task"/>
+    </form>
+</div>
+<br>
+<div>
+    <h3>Task log data:</h3>
+    <table>
+        <tr>
+            <td>Author:</td>
+            <td th:utext="${task.author}"></td>
+        </tr>
+        <tr>
+            <td>Subject:</td>
+            <td th:utext="${task.subject}"></td>
+        </tr>
+    </table>
+</div>
+<br>
+<div>
+    <table border="1" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Date/Time</th>
+            <th>User</th>
+            <th>Action</th>
+            <th>Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tasklog:${tasklogs}">
+            <td th:utext="${tasklog.dt}"></td>
+            <td th:utext="${tasklog.user}"></td>
+            <td th:utext="${tasklog.action}"></td>
+            <td th:utext="${tasklog.result}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

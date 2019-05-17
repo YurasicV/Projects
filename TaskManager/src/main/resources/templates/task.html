@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Edit</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <form th:action="@{/main}" method="post">
+        <input type="submit" value="Back to Main"/>
+    </form>
+</div>
+<br>
+<div>
+    <h3>Task: </h3>
+    <form action="#" th:action="@{/task_save}" th:object="${task}" method="post">
+        <table>
+            <tr>
+                <td colspan="2"><button type="submit">Start</button></td>
+            </tr>
+            <tr>
+                <td>Author:</td>
+                <td th:utext="${task.author}"></td>
+            </tr>
+            <tr>
+                <td>Subject:</td>
+                <td><input type="text" name="subject" required /></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td><input type="" name="description" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div>
+    <h3>Resolutions: </h3>
+    <form th:action="@{/resolution}" method="post">
+        <input type="submit" value="Add new resolution"/>
+    </form>
+    <br>
+    <table border="1" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Queue number</th>
+            <th>Instruction</th>
+            <th>Action</th>
+            <th>Result</th>
+            <th>Del</th>
+            <th>Upd</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resolution:${task.resolutions}">
+            <td th:utext="${resolution.user}"></td>
+            <td th:utext="${resolution.queueNumber}"></td>
+            <td th:utext="${resolution.instruction}"></td>
+            <td th:utext="${resolution.action}"></td>
+            <td th:utext="${resolution.result}"></td>
+            <td>
+                <form th:action="@{/resolution_del}" th:object="${resolution}" method="post">
+                    <input type="submit" value="X"/>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/resolution}" th:object="${resolution}" method="post">
+                    <input type="submit" value="..."/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br><br>
+<div>
+    <form th:action="@{/tasklog}" method="post">
+        <input type="submit" value="View task log"/>
+    </form>
+</div>
+</body>
+</html>

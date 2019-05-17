@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Manager Register</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/login}" method="get">
+        <input type="submit" value="Back to Login"/>
+    </form>
+</div>
+<br>
+<h3>Register:</h3>
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+<div>
+<form action="#" th:action="@{/register}" th:object="${user}" method="post">
+    <table>
+        <tr><td>Full name:</td><td><input type="text" name="fullName" required /></td></tr>
+        <tr><td>User name:</td><td><input type="text" name="userName" required /></td></tr>
+        <tr><td>Password:</td><td><input type="password" name="password" required /></td></tr>
+        <tr><td colspan="2"><button type="submit">Sign Up</button></td></tr>
+    </table>
+</form>
+</div>
+</body>
+</html>

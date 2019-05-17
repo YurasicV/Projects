@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout"/>
+        <label th:text="${loggedUser.fullName}"></label>
+    </form>
+</div>
+<br>
+<div>
+    <h3>Outgoing tasks</h3>
+<!--    <h3>Incoming tasks</h3>-->
+    <form th:action="@{/task_add}" method="post">
+        <input type="submit" value="Add new task"/>
+    </form>
+    <br>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th>Date/time</th>
+            <th>Author</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Result</th>
+            <th>Del</th>
+            <th>Upd</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task:${tasks}">
+            <td th:utext="${task.dtCreated}"></td>
+            <td th:utext="${task.author}"></td>
+            <td th:utext="${task.subject}"></td>
+            <td th:utext="${task.taskStatus}"></td>
+            <td th:utext="${task.result}"></td>
+            <td>
+                <form th:action="@{/task_del}" th:object="${task}" method="post">
+                    <input type="submit" value="X"/>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/task}" th:object="${task}" method="post">
+                    <input type="submit" value="..."/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+</div>
+</body>
+</html>
