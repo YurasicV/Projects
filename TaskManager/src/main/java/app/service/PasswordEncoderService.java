@@ -1,10 +1,13 @@
-package app.config;
+package app.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public class PasswordEncoderConfig {
-    public static PasswordEncoder passwordEncoder() {
+@Service
+public class PasswordEncoderService {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
+

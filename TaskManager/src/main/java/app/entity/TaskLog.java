@@ -1,7 +1,9 @@
 package app.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TASK_LOG")
@@ -12,31 +14,29 @@ public class TaskLog {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "TASK_ID")
     private Task task;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dt;
+    @CreationTimestamp
+    private LocalDateTime dt;
 
     @Column(name = "ACTION_ID")
     @Enumerated(EnumType.ORDINAL)
     private Action action;
 
     public TaskLog(Task task, User user, Action action) {
-        this();
         this.task = task;
         this.user = user;
         this.action = action;
     }
 
     public TaskLog() {
-        this.dt = new Date();
     }
 
     public Long getId() {
@@ -47,11 +47,11 @@ public class TaskLog {
         this.id = id;
     }
 
-    public Date getDt() {
+    public LocalDateTime getDt() {
         return dt;
     }
 
-    public void setDt(Date dt) {
+    public void setDt(LocalDateTime dt) {
         this.dt = dt;
     }
 

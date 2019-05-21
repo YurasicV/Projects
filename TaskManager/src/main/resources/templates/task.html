@@ -13,33 +13,45 @@
 <br>
 <div>
     <h3>Task: </h3>
-    <form action="#" th:action="@{/task_save}" th:object="${task}" method="post">
+    <form action="#" th:action="@{/task/save}" th:object="${currentTask}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{direction}"/>
+        <input type="hidden" th:field="*{author}"/>
+        <input type="hidden" th:field="*{dtCreated}"/>
+        <input type="hidden" th:field="*{taskStatus}"/>
+        <input type="hidden" th:field="*{result}"/>
         <table>
             <tr>
-                <td colspan="2"><button type="submit">Start</button></td>
-            </tr>
+                <td colspan="2">
+                    <span th:each="action : ${actionList}"
+                          th:object="${action}">
+                       <button type="submit" name="actionName"
+                               th:value="*{toString()}" th:text="*{toString()}">
+                       </button>
+                    </span>
+                </td>
             <tr>
                 <td>Author:</td>
-                <td th:utext="${task.author}"></td>
+                <td th:utext="${currentTask.author.fullName}"></td>
             </tr>
             <tr>
                 <td>Subject:</td>
-                <td><input type="text" name="subject" required /></td>
+                <td><input type="text" th:field="*{subject}" required/></td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td><input type="" name="description" /></td>
+                <td><textarea th:field="*{description}" cols="20" rows="3"></textarea></td>
             </tr>
         </table>
     </form>
 </div>
-<div>
+<div th:if="${currentTask.id != null}">
     <h3>Resolutions: </h3>
-    <form th:action="@{/resolution}" method="post">
+    <form th:action="@{/resolution/add}" method="post" th:if="${currentTask.editable}">
+        <input type="hidden" name="taskId" th:value="${currentTask.id}">
         <input type="submit" value="Add new resolution"/>
     </form>
-    <br>
-    <table border="1" cellpadding="0" cellspacing="0">
+    <table>
         <thead>
         <tr>
             <th>User</th>
@@ -47,34 +59,34 @@
             <th>Instruction</th>
             <th>Action</th>
             <th>Result</th>
-            <th>Del</th>
-            <th>Upd</th>
+            <th th:if="${currentTask.editable}"></th>
+            <th th:if="${currentTask.editable}"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="resolution:${task.resolutions}">
-            <td th:utext="${resolution.user}"></td>
+        <tr th:each="resolution:${currentTask.resolutions}">
+            <td th:utext="${resolution.user.fullName}"></td>
             <td th:utext="${resolution.queueNumber}"></td>
             <td th:utext="${resolution.instruction}"></td>
             <td th:utext="${resolution.action}"></td>
-            <td th:utext="${resolution.result}"></td>
+            <td th:utext="${resolution.action != null} ? ${resolution.action.result} : ''"></td>
             <td>
-                <form th:action="@{/resolution_del}" th:object="${resolution}" method="post">
+                <form th:action="@{/resolution/del/{id}(id=${resolution.id})}" method="post" th:if="${currentTask.editable}">
+                    <input type="hidden" name="taskId" th:value="${currentTask.id}">
                     <input type="submit" value="X"/>
                 </form>
             </td>
             <td>
-                <form th:action="@{/resolution}" th:object="${resolution}" method="post">
+                <form th:action="@{/resolution/{id}(id=${resolution.id})}" method="post" th:if="${currentTask.editable}">
+                    <input type="hidden" name="taskId" th:value="${currentTask.id}">
                     <input type="submit" value="..."/>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-</div>
-<br><br>
-<div>
-    <form th:action="@{/tasklog}" method="post">
+    <br><br>
+    <form th:action="@{/tasklog/{id}(id=${currentTask.id})}" method="post">
         <input type="submit" value="View task log"/>
     </form>
 </div>

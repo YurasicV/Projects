@@ -1,7 +1,10 @@
 package app.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,24 +22,21 @@ public class Task {
     @Column(name = "DESCRIPTION", length = 255)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "AUTHOR_ID")
     private User author;
 
     @Column(name = "DT_CREATED")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dtCreated;
+    @CreationTimestamp
+    private LocalDateTime dtCreated;
 
     @OneToMany(mappedBy="task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("queueNumber ASC")
     private Set<Resolution> resolutions;
 
     @Column(name = "TASK_STATUS_ID")
     @Enumerated(EnumType.ORDINAL)
     private TaskStatus taskStatus;
-
-//    @Column(name = "TASK_STATE_ID")
-//    @Enumerated(EnumType.ORDINAL)
-    private TaskState taskState;
 
     @Column(name = "RESULT_ID")
     @Enumerated(EnumType.ORDINAL)
@@ -45,16 +45,16 @@ public class Task {
     @OneToMany(mappedBy="task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TaskLog> taskLogs;
 
-    public Task(User author, String subject, String description, TaskStatus taskStatus) {
-        this();
-        this.author = author;
-        this.subject = subject;
-        this.description = description;
-        this.taskStatus = taskStatus;
-    }
+    @Transient
+    private Direction direction;
+
+    @Transient
+    private Boolean editable;
+
+    @Transient
+    private Boolean current;
 
     public Task() {
-        this.dtCreated = new Date();
     }
 
     public Long getId() {
@@ -89,11 +89,11 @@ public class Task {
         this.author = author;
     }
 
-    public Date getDtCreated() {
+    public LocalDateTime getDtCreated() {
         return dtCreated;
     }
 
-    public void setDtCreated(Date dtCreated) {
+    public void setDtCreated(LocalDateTime dtCreated) {
         this.dtCreated = dtCreated;
     }
 
@@ -113,19 +113,48 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public TaskState getTaskState() {
-        return taskState;
-    }
-
-    public void setTaskState(TaskState taskState) {
-        this.taskState = taskState;
-    }
-
     public Result getResult() {
         return result;
     }
 
     public void setResult(Result result) {
         this.result = result;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public Boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
+    }
+
+    public Boolean getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Boolean current) {
+        this.current = current;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id.equals(task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

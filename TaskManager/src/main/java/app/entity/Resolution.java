@@ -1,6 +1,7 @@
 package app.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,11 +13,11 @@ public class Resolution {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "TASK_ID")
     private Task task;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
@@ -27,16 +28,9 @@ public class Resolution {
     @Enumerated(EnumType.ORDINAL)
     private Instruction instruction;
 
-    @Column(name = "RESULT_ID")
+    @Column(name = "ACTION_ID")
     @Enumerated(EnumType.ORDINAL)
-    private Result result;
-
-    public Resolution(Task task, User user, Integer queueNumber, Instruction instruction) {
-        this.task = task;
-        this.user = user;
-        this.queueNumber = queueNumber;
-        this.instruction = instruction;
-    }
+    private Action action;
 
     public Resolution() {
     }
@@ -81,11 +75,24 @@ public class Resolution {
         this.instruction = instruction;
     }
 
-    public Result getResult() {
-        return result;
+    public Action getAction() {
+        return action;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resolution that = (Resolution) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

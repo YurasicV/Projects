@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>
-    <form th:action="@{/task}" method="post">
+    <form th:action="@{/task/{id}(id=${currentTask.id})}" method="post">
         <input type="submit" value="Back to Task"/>
     </form>
 </div>
@@ -16,17 +16,17 @@
     <table>
         <tr>
             <td>Author:</td>
-            <td th:utext="${task.author}"></td>
+            <td th:utext="${currentTask.author.fullName}"></td>
         </tr>
         <tr>
             <td>Subject:</td>
-            <td th:utext="${task.subject}"></td>
+            <td th:utext="${currentTask.subject}"></td>
         </tr>
     </table>
 </div>
 <br>
 <div>
-    <table border="1" cellpadding="0" cellspacing="0">
+    <table>
         <thead>
         <tr>
             <th>Date/Time</th>
@@ -37,10 +37,10 @@
         </thead>
         <tbody>
         <tr th:each="tasklog:${tasklogs}">
-            <td th:utext="${tasklog.dt}"></td>
-            <td th:utext="${tasklog.user}"></td>
+            <td th:utext="${#temporals.format(tasklog.dt, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:utext="${tasklog.user.fullName}"></td>
             <td th:utext="${tasklog.action}"></td>
-            <td th:utext="${tasklog.result}"></td>
+            <td th:utext="${tasklog.action.result}"></td>
         </tr>
         </tbody>
     </table>

@@ -1,10 +1,9 @@
 package app.controller;
 
-import app.config.PasswordEncoderConfig;
 import app.entity.Role;
 import app.entity.User;
-import app.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import app.service.PasswordEncoderService;
+import app.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,14 @@ import java.util.Collections;
 
 @Controller
 public class RegisterController {
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+    private PasswordEncoderService passwordEncoderService;
+
+    public RegisterController(UserService userService,
+                              PasswordEncoderService passwordEncoderService) {
+        this.userService = userService;
+        this.passwordEncoderService = passwordEncoderService;
+    }
 
     @GetMapping("/register")
     public String register() {
@@ -26,15 +31,15 @@ public class RegisterController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
         String userName = user.getUserName();
-        User userDb = userRepository.findByUserName(userName);
+        User userDb = userService.findByUserName(userName);
         if (userDb != null) {
             model.addAttribute("message", "User " + userName + " already exists!");
             return "register";
         }
         user.setEnabled(true);
         user.setRoles(Collections.singleton(Role.USER));
-        user.setPassword(PasswordEncoderConfig.passwordEncoder().encode(user.getPassword()));
-        userRepository.save(user);
+        user.setPassword(passwordEncoderService.passwordEncoder().encode(user.getPassword()));
+        userService.save(user);
         model.addAttribute("message", "User " + userName +
                 " has been registered successfully! Please, login");
         return "login";

@@ -13,38 +13,40 @@
 </div>
 <br>
 <div>
-    <h3>Outgoing tasks</h3>
-<!--    <h3>Incoming tasks</h3>-->
-    <form th:action="@{/task_add}" method="post">
+    <h3>My tasks:</h3>
+    <form th:action="@{/task/add}" method="post">
         <input type="submit" value="Add new task"/>
     </form>
-    <br>
-    <table border="1" cellspacing="0" cellpadding="0">
+    <table>
         <thead>
         <tr>
+            <th></th>
+            <th>Direction</th>
             <th>Date/time</th>
             <th>Author</th>
             <th>Subject</th>
             <th>Status</th>
             <th>Result</th>
-            <th>Del</th>
-            <th>Upd</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="task:${tasks}">
-            <td th:utext="${task.dtCreated}"></td>
-            <td th:utext="${task.author}"></td>
+            <td th:utext="${task.current} ? '*' : ''"></td>
+            <td th:utext="${task.direction}"></td>
+            <td th:utext="${#temporals.format(task.dtCreated, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:utext="${task.author.fullName}"></td>
             <td th:utext="${task.subject}"></td>
             <td th:utext="${task.taskStatus}"></td>
             <td th:utext="${task.result}"></td>
             <td>
-                <form th:action="@{/task_del}" th:object="${task}" method="post">
+                <form th:action="@{/task/del/{id}(id=${task.id})}" method="post" th:if="${task.editable}">
                     <input type="submit" value="X"/>
                 </form>
             </td>
             <td>
-                <form th:action="@{/task}" th:object="${task}" method="post">
+                <form th:action="@{/task/{id}(id=${task.id})}" method="post">
                     <input type="submit" value="..."/>
                 </form>
             </td>

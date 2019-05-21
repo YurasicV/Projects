@@ -1,6 +1,9 @@
 package app.entity;
 
 public enum Action {
+    SAVE(null),
+    RUN(null),
+    STOP(null),
     AGREED(Result.YES),
     NOT_AGREED(Result.NO),
     EXECUTED(Result.YES),

@@ -6,14 +6,18 @@
 </head>
 <body>
 <div>
-    <form th:action="@{/task}" method="post">
+    <form th:action="@{/task/{id}(id=${resolution.task.id})}" method="post">
         <input type="submit" value="Back to Task"/>
     </form>
 </div>
 <br>
 <h3>Resolution: </h3>
 <div>
-    <form action="#" th:action="@{/resolution_add}" th:object="${resolution}" method="post">
+    <form action="#" th:action="@{/resolution/save}" th:object="${resolution}" method="post">
+        <input type="hidden" name="taskId" th:value="${resolution.task.id}">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{task}" />
+        <input type="hidden" th:field="*{action}" />
         <table>
             <tr>
                 <td>User:</td>
