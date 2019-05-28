@@ -2,6 +2,8 @@ package app.service;
 
 import app.entity.*;
 import app.repository.TaskRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
-    public List<Task> findAllByUser(User user) {
-        List<Task> tasks =taskRepository.findAllByResolutionUser(user.getId());
+    public Page<Task> findAllByUser(User user, Pageable pageable) {
+        Page<Task> tasks =taskRepository.findAllByResolutionUser(user, pageable);
         tasks.forEach(t -> {
             t.setDirection(user.equals(t.getAuthor()) ? Direction.OUT : Direction.IN);
             t.setEditable(IsTaskEditable(t, user));

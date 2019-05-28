@@ -1,18 +1,27 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Task Edit</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Task Manager: Task'"></title>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
 </head>
 <body>
-<div>
-    <form th:action="@{/main}" method="post">
-        <input type="submit" value="Back to Main"/>
-    </form>
-</div>
-<br>
-<div>
-    <h3>Task: </h3>
+<div class="container">
+    <div class="modal-header">
+        <h3 class="modal-title"><b>Task</b></h3>
+        <form action="#" th:action="@{/main}" method="get">
+            <button type="submit" class="close" aria-hidden="true">&times;</button>
+        </form>
+    </div>
     <form action="#" th:action="@{/task/save}" th:object="${currentTask}" method="post">
         <input type="hidden" th:field="*{id}"/>
         <input type="hidden" th:field="*{direction}"/>
@@ -20,75 +29,96 @@
         <input type="hidden" th:field="*{dtCreated}"/>
         <input type="hidden" th:field="*{taskStatus}"/>
         <input type="hidden" th:field="*{result}"/>
-        <table>
-            <tr>
-                <td colspan="2">
-                    <span th:each="action : ${actionList}"
-                          th:object="${action}">
-                       <button type="submit" name="actionName"
-                               th:value="*{toString()}" th:text="*{toString()}">
-                       </button>
-                    </span>
-                </td>
-            <tr>
-                <td>Author:</td>
-                <td th:utext="${currentTask.author.fullName}"></td>
-            </tr>
-            <tr>
-                <td>Subject:</td>
-                <td><input type="text" th:field="*{subject}" required/></td>
-            </tr>
-            <tr>
-                <td>Description:</td>
-                <td><textarea th:field="*{description}" cols="20" rows="3"></textarea></td>
-            </tr>
-        </table>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Author</label>
+                <label th:utext="${currentTask.author?.fullName}" class="form-control"></label>
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" th:field="*{subject}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea th:field="*{description}" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <span th:each="action : ${actionList}" th:object="${action}">
+                <button type="submit" name="actionName"
+                        th:class="${action.result == T(app.entity.Result).YES} ? 'btn btn-success' : (${action.result == T(app.entity.Result).NO} ? 'btn btn-danger' : 'btn btn-primary')"
+                        th:value="*{toString()}" th:text="*{getCaption()}">
+                </button>&nbsp;&nbsp;
+            </span>
+        </div>
     </form>
-</div>
-<div th:if="${currentTask.id != null}">
-    <h3>Resolutions: </h3>
-    <form th:action="@{/resolution/add}" method="post" th:if="${currentTask.editable}">
-        <input type="hidden" name="taskId" th:value="${currentTask.id}">
-        <input type="submit" value="Add new resolution"/>
-    </form>
-    <table>
-        <thead>
-        <tr>
-            <th>User</th>
-            <th>Queue number</th>
-            <th>Instruction</th>
-            <th>Action</th>
-            <th>Result</th>
-            <th th:if="${currentTask.editable}"></th>
-            <th th:if="${currentTask.editable}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="resolution:${currentTask.resolutions}">
-            <td th:utext="${resolution.user.fullName}"></td>
-            <td th:utext="${resolution.queueNumber}"></td>
-            <td th:utext="${resolution.instruction}"></td>
-            <td th:utext="${resolution.action}"></td>
-            <td th:utext="${resolution.action != null} ? ${resolution.action.result} : ''"></td>
-            <td>
-                <form th:action="@{/resolution/del/{id}(id=${resolution.id})}" method="post" th:if="${currentTask.editable}">
-                    <input type="hidden" name="taskId" th:value="${currentTask.id}">
-                    <input type="submit" value="X"/>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/resolution/{id}(id=${resolution.id})}" method="post" th:if="${currentTask.editable}">
-                    <input type="hidden" name="taskId" th:value="${currentTask.id}">
-                    <input type="submit" value="..."/>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <br><br>
-    <form th:action="@{/tasklog/{id}(id=${currentTask.id})}" method="post">
-        <input type="submit" value="View task log"/>
-    </form>
+
+    <div class="modal-body" th:if="${currentTask.id != null}">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Resolutions</h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <form th:action="@{/resolution/add}" method="post" th:if="${currentTask.editable}">
+                            <input type="hidden" name="taskId" th:value="${currentTask.id}">
+                            <button type="submit" class="btn btn-success">
+                                <i class="material-icons">&#xE147;</i>
+                                <span>Add New Resolution</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Queue number</th>
+                    <th>Instruction</th>
+                    <th>Action</th>
+                    <th>Result</th>
+                    <th th:if="${currentTask.editable}">Upd</th>
+                    <th th:if="${currentTask.editable}">Del</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="resolution:${currentTask.resolutions}"
+                    th:class="${resolution.action?.result == T(app.entity.Result).YES} ? 'task-success' : (${resolution.action?.result == T(app.entity.Result).NO} ? 'task-failure' : '')">
+                    <td th:utext="${resolution.user?.fullName}"></td>
+                    <td th:utext="${resolution.queueNumber}"></td>
+                    <td th:utext="${resolution.instruction?.caption}"></td>
+                    <td th:utext="${resolution.action?.caption}"></td>
+                    <td th:utext="${resolution.action?.result?.caption}"></td>
+                    <td>
+                        <form th:action="@{/resolution/{id}(id=${resolution.id})}" method="post"
+                              th:if="${currentTask.editable}">
+                            <input type="hidden" name="taskId" th:value="${currentTask.id}">
+                            <button type="submit" class="btn btn-link btn-xs edit">
+                                <i class="material-icons" title="Edit">&#xE254;</i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/resolution/del/{id}(id=${resolution.id})}" method="post"
+                              th:if="${currentTask.editable}">
+                            <input type="hidden" name="taskId" th:value="${currentTask.id}">
+                            <button type="submit" class="btn btn-link btn-xs delete">
+                                <i class="material-icons" title="Delete">&#xE872;</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a th:href="@{/tasklog/{id}(id=${currentTask.id})}" class="btn btn-info">View task log</a>
+    </div>
 </div>
 </body>
 </html>

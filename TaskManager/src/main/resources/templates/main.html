@@ -1,60 +1,100 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Task Manager: ' + ${loggedUser.fullName}"></title>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
 </head>
 <body>
-<div>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Logout"/>
-        <label th:text="${loggedUser.fullName}"></label>
-    </form>
+
+<nav class="navbar navbar-default navbar-expand-lg navbar-light">
+    <div class="navbar-header d-flex col">
+        <a class="navbar-brand" th:href="@{/logout}">Logout: <b th:text="${loggedUser.fullName}">Name</b></a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>My <b>Tasks</b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <a th:href="@{/task/add}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i>
+                        <span>Add New Task</span></a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Current</th>
+                <th>Direction</th>
+                <th>Date/time</th>
+                <th>Author</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Result</th>
+                <th>Upd</th>
+                <th>Del</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task:${tasks}"
+                th:class="${task.result == T(app.entity.Result).YES} ? 'task-success' : (${task.result == T(app.entity.Result).NO} ? 'task-failure' : '')">
+                <td class="text-center"><i class="material-icons alarm" th:utext="${task.current} ? '&#xE7F7;' : ''"></i></td>
+                <td th:utext="${task.direction?.caption}"></td>
+                <td th:utext="${#temporals.format(task.dtCreated, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:utext="${task.author?.fullName}"></td>
+                <td th:utext="${task.subject}"></td>
+                <td th:utext="${task.taskStatus?.caption}"></td>
+                <td th:utext="${task.result?.caption}"></td>
+                <td>
+                    <a th:href="@{/task/{id}(id=${task.id})}" class="edit" data-toggle="modal"><i
+                            class="material-icons"
+                            data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                </td>
+                <td>
+                    <a th:href="@{/task/del/{id}(id=${task.id})}" th:if="${task.editable}" class="delete"
+                       data-toggle="modal"><i class="material-icons"
+                                              data-toggle="tooltip"
+                                              title="Delete">&#xE872;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="clearfix" th:if="${tasks.totalElements} > 0">
+            <div class="hint-text">Showing <b th:utext="${tasks.numberOfElements}"></b> out of <b th:utext="${tasks.totalElements}"></b> entries</div>
+            <ul class="pagination">
+                <li th:class="${tasks.hasPrevious()} ? 'page-link' : 'page-item disabled'">
+                    <a th:href="@{/main(page=${tasks.number-1},size=${tasks.size})}">Previous</a>
+                </li>
+
+                <th:block th:each="i: ${#numbers.sequence(0, tasks.totalPages - 1)}">
+                    <li th:class="${tasks.number == i} ? 'page-item active' : 'page-item'">
+                        <a th:href="@{/main(page=${i},size=${tasks.size})}" th:utext="${i+1}" class="page-link"></a>
+                    </li>
+                </th:block>
+
+                <li th:class="${tasks.hasNext()} ? 'page-link' : 'page-item disabled'">
+                    <a th:href="@{/main(page=${tasks.number+1},size=${tasks.size})}">Next</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 </div>
-<br>
-<div>
-    <h3>My tasks:</h3>
-    <form th:action="@{/task/add}" method="post">
-        <input type="submit" value="Add new task"/>
-    </form>
-    <table>
-        <thead>
-        <tr>
-            <th></th>
-            <th>Direction</th>
-            <th>Date/time</th>
-            <th>Author</th>
-            <th>Subject</th>
-            <th>Status</th>
-            <th>Result</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="task:${tasks}">
-            <td th:utext="${task.current} ? '*' : ''"></td>
-            <td th:utext="${task.direction}"></td>
-            <td th:utext="${#temporals.format(task.dtCreated, 'dd-MM-yyyy HH:mm')}"></td>
-            <td th:utext="${task.author.fullName}"></td>
-            <td th:utext="${task.subject}"></td>
-            <td th:utext="${task.taskStatus}"></td>
-            <td th:utext="${task.result}"></td>
-            <td>
-                <form th:action="@{/task/del/{id}(id=${task.id})}" method="post" th:if="${task.editable}">
-                    <input type="submit" value="X"/>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{/task/{id}(id=${task.id})}" method="post">
-                    <input type="submit" value="..."/>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div>
-</div>
+
 </body>
 </html>

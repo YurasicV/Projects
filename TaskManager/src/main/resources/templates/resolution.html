@@ -1,54 +1,60 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Task Edit</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Task Manager: Resolution'"></title>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/table.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
 </head>
 <body>
-<div>
-    <form th:action="@{/task/{id}(id=${resolution.task.id})}" method="post">
-        <input type="submit" value="Back to Task"/>
-    </form>
-</div>
-<br>
-<h3>Resolution: </h3>
-<div>
+<div class="container">
+    <div class="modal-header">
+        <h3 class="modal-title"><b>Resolution</b></h3>
+        <form action="#" th:action="@{/task/{id}(id=${resolution.task.id})}" method="get">
+            <button type="submit" class="close" aria-hidden="true">&times;</button>
+        </form>
+    </div>
     <form action="#" th:action="@{/resolution/save}" th:object="${resolution}" method="post">
         <input type="hidden" name="taskId" th:value="${resolution.task.id}">
-        <input type="hidden" th:field="*{id}" />
-        <input type="hidden" th:field="*{task}" />
-        <input type="hidden" th:field="*{action}" />
-        <table>
-            <tr>
-                <td>User:</td>
-                <td>
-                    <select th:field="*{user}">
-                        <option th:each="user : ${users}"
-                                th:value="${user.id}"
-                                th:utext="${user.fullName}">
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Queue number:</td>
-                <td><input type="number" min="1" max="9" step="1" value="1" name="queueNumber" required/></td>
-            </tr>
-            <tr>
-                <td>Instruction:</td>
-                <td>
-                    <select th:field="*{instruction}">
-                        <option th:each="instruction : ${T(app.entity.Instruction).values()}"
-                                th:value="${instruction}"
-                                th:utext="${instruction}">
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><button type="submit">Save</button></td>
-            </tr>
-        </table>
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{task}"/>
+        <input type="hidden" th:field="*{action}"/>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>User</label>
+                <select th:field="*{user}" class="form-control" required>
+                    <option th:each="user : ${users}"
+                            th:value="${user.id}"
+                            th:utext="${user.fullName}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Queue number</label>
+                <input type="number" min="1" max="9" step="1" value="1" name="queueNumber"
+                       class="form-control" required/>
+            </div>
+            <div class="form-group">
+                <label>Instruction</label>
+                <select th:field="*{instruction}" class="form-control" required>
+                    <option th:each="instruction : ${T(app.entity.Instruction).values()}"
+                            th:value="${instruction}"
+                            th:utext="${instruction.caption}">
+                    </option>
+                </select>
+            </div>
+        </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
     </form>
 </div>
 </body>

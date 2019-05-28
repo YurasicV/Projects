@@ -1,5 +1,6 @@
 package app.entity;
 
+import app.converter.ActionConverter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -27,7 +28,7 @@ public class TaskLog {
     private LocalDateTime dt;
 
     @Column(name = "ACTION_ID")
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = ActionConverter.class)
     private Action action;
 
     public TaskLog(Task task, User user, Action action) {

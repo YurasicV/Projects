@@ -1,5 +1,7 @@
 package app.entity;
 
+import app.converter.ResultConverter;
+import app.converter.TaskStatusConverter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -35,11 +37,11 @@ public class Task {
     private Set<Resolution> resolutions;
 
     @Column(name = "TASK_STATUS_ID")
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = TaskStatusConverter.class)
     private TaskStatus taskStatus;
 
     @Column(name = "RESULT_ID")
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = ResultConverter.class)
     private Result result;
 
     @OneToMany(mappedBy="task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

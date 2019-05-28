@@ -1,28 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Task Manager Register</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Task Manager Register Form</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div>
-    <form th:action="@{/login}" method="get">
-        <input type="submit" value="Back to Login"/>
+<div class="login-form">
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+        <h2 class="text-center text-success">Register</h2>
+        <div class="clearfix">
+            <div th:if="${message}">
+                <p class="text-center text-info" th:text="${message}"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Full name" name="fullName" required="required">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" name="userName" required="required">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" name="password" required="required">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block btn-success">Submit</button>
+        </div>
     </form>
-</div>
-<br>
-<h3>Register:</h3>
-<div th:if="${message}">
-    <p th:text="${message}"></p>
-</div>
-<div>
-<form action="#" th:action="@{/register}" th:object="${user}" method="post">
-    <table>
-        <tr><td>Full name:</td><td><input type="text" name="fullName" required /></td></tr>
-        <tr><td>User name:</td><td><input type="text" name="userName" required /></td></tr>
-        <tr><td>Password:</td><td><input type="password" name="password" required /></td></tr>
-        <tr><td colspan="2"><button type="submit">Sign Up</button></td></tr>
-    </table>
-</form>
+    <p class="text-center"><a th:href="@{/login}">Back to login</a></p>
 </div>
 </body>
 </html>

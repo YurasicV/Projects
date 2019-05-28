@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class ResolutionController {
         this.resolutionService = resolutionService;
     }
 
-    @RequestMapping("/resolution/{id}")
+    @PostMapping("/resolution/{id}")
     public String resolution(@PathVariable("id") Long id,
                              @ModelAttribute("taskId") Long taskId,
                              Model model) {

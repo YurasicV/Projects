@@ -5,8 +5,8 @@ import app.service.TaskLogService;
 import app.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class TaskLogController {
         this.taskService = taskService;
     }
 
-    @RequestMapping("/tasklog/{id}")
+    @GetMapping("/tasklog/{id}")
     public String resolution(@PathVariable("id") Long id,
                              Model model) {
         Optional<Task> currentTaskOptional = taskService.findById(id);

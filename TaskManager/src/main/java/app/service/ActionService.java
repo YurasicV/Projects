@@ -1,5 +1,12 @@
 package app.service;
 
+import app.command.actionlist.ActionListInvoker;
+import app.command.actionlist.RunningTaskActionList;
+import app.command.actionlist.UserIsAuthorActionList;
+import app.command.doaction.DoActionInvoker;
+import app.command.doaction.DoResultActionCommand;
+import app.command.doaction.DoRunActionCommand;
+import app.command.doaction.DoStopActionCommand;
 import app.entity.*;
 import app.repository.ResolutionRepository;
 import app.repository.TaskLogRepository;
@@ -8,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ActionService {
@@ -25,60 +30,33 @@ public class ActionService {
     }
 
     public List<Action> getActionList(Task task, User user) {
+        ActionListInvoker actionListInvoker = new ActionListInvoker(
+                new RunningTaskActionList(task, user, resolutionRepository),
+                new UserIsAuthorActionList(task));
+
         List<Action> actions = new ArrayList<>();
         TaskStatus status = task.getTaskStatus();
         User author = task.getAuthor();
         if (status == TaskStatus.RUNNING) {
-            Set<Resolution> resolutions = resolutionRepository.findAllByTask(task);
-            Optional<Resolution> resolutionOptional = resolutions.stream()
-                    .filter(r -> (user.equals(r.getUser())) && (r.getAction() == null)).findFirst();
-            if (resolutionOptional.isPresent()) {
-                Resolution resolution = resolutionOptional.get();
-                Integer queueNumber = resolution.getQueueNumber();
-                if (resolutions.stream()
-                        .noneMatch(r -> (r.getQueueNumber() < queueNumber) && (r.getAction() == null))) {
-                    actions.addAll(resolution.getInstruction().getActions());
-                }
-            }
-            if (user.equals(author)) {
-                actions.add(Action.STOP);
-            }
-        } else {
-            if (user.equals(author)) {
-                actions.add(Action.SAVE);
-                if ((task.getId() != null) && (task.getResolutions().size() > 0)) {
-                    actions.add(Action.RUN);
-                }
-            }
+            actions.addAll(actionListInvoker.getActionListWhenRunningTask());
+        } else if (user.equals(author)) {
+            actions.addAll(actionListInvoker.getActionListWhenUserIsAuthor());
         }
         actions.sort(Action::compareTo);
         return actions;
     }
 
     public void doAction(Task task, User user, Action action) {
+        DoActionInvoker doActionInvoker = new DoActionInvoker(
+                new DoRunActionCommand(task, resolutionRepository),
+                new DoStopActionCommand(task),
+                new DoResultActionCommand(task, user, action, resolutionRepository));
         if (action == Action.RUN) {
-            task.setTaskStatus(TaskStatus.RUNNING);
-            task.setResult(null);
-            Set<Resolution> resolutions = resolutionRepository.findAllByTask(task);
-            resolutions.forEach(r -> r.setAction(null));
+            doActionInvoker.invokeRunAction();
         } else if (action == Action.STOP) {
-            task.setTaskStatus(TaskStatus.STOPPED);
-        } else if (action != Action.SAVE) {
-            Set<Resolution> resolutions = resolutionRepository.findAllByTask(task);
-            Optional<Resolution> resolutionOptional = resolutions.stream()
-                    .filter(r -> (user.equals(r.getUser())) && (r.getAction() == null)).findFirst();
-            if (resolutionOptional.isPresent()) {
-                Resolution resolution = resolutionOptional.get();
-                resolution.setAction(action);
-            }
-            if (resolutions.stream()
-                    .anyMatch(r -> (r.getAction() != null) && (r.getAction().getResult() == Result.NO))) {
-                task.setResult(Result.NO);
-                task.setTaskStatus(TaskStatus.DONE);
-            } else if (resolutions.stream().noneMatch(r -> r.getAction() == null)) {
-                task.setResult(Result.YES);
-                task.setTaskStatus(TaskStatus.DONE);
-            }
+            doActionInvoker.invokeStopAction();
+        } else if (action.getResult() != null) {
+            doActionInvoker.invokeResultAction();
         }
         taskRepository.save(task);
         taskLogRepository.save(new TaskLog(task, user, action));

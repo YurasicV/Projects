@@ -37,7 +37,7 @@ public class TaskController {
         return "task";
     }
 
-    @PostMapping("/task/add")
+    @GetMapping("/task/add")
     public String taskAdd(@SessionAttribute("loggedUser") User loggedUser, Model model) {
         Task currentTask = new Task();
         currentTask.setAuthor(loggedUser);
@@ -59,7 +59,7 @@ public class TaskController {
         return "redirect:/main";
     }
 
-    @PostMapping("/task/del/{id}")
+    @GetMapping("/task/del/{id}")
     public String taskDel(@PathVariable("id") Long id,
                           Model model) {
         taskService.deleteById(id);

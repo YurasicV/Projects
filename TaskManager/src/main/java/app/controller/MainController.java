@@ -4,11 +4,13 @@ import app.entity.Task;
 import app.entity.User;
 import app.service.TaskService;
 import app.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @SessionAttributes("loggedUser")
@@ -22,20 +24,22 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String mainPageLogged(Principal principal, Model model) {
-//        User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User loggedUser = (User)principal;
+    public String mainPageLogged(Principal principal,
+                                 @PageableDefault(page=0, size=10) Pageable pageable,
+                                 Model model) {
         User loggedUser = userService.findByUserName(principal.getName());
 
-        List<Task> tasks = taskService.findAllByUser(loggedUser);
+        Page<Task> tasks = taskService.findAllByUser(loggedUser, pageable);
         model.addAttribute("loggedUser", loggedUser);
         model.addAttribute("tasks", tasks);
         return "main";
     }
 
     @RequestMapping("/main")
-    public String mainPage(@SessionAttribute("loggedUser") User loggedUser, Model model) {
-        List<Task> tasks = taskService.findAllByUser(loggedUser);
+    public String mainPage(@SessionAttribute("loggedUser") User loggedUser,
+                           @PageableDefault(page=0, size=10) Pageable pageable,
+                           Model model) {
+        Page<Task> tasks = taskService.findAllByUser(loggedUser, pageable);
         model.addAttribute("loggedUser", loggedUser);
         model.addAttribute("tasks", tasks);
         return "main";

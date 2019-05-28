@@ -1,5 +1,8 @@
 package app.entity;
 
+import app.converter.ActionConverter;
+import app.converter.InstructionConverter;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -25,11 +28,11 @@ public class Resolution {
     private Integer queueNumber;
 
     @Column(name = "INSTRUCTION_ID")
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = InstructionConverter.class)
     private Instruction instruction;
 
     @Column(name = "ACTION_ID")
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = ActionConverter.class)
     private Action action;
 
     public Resolution() {
